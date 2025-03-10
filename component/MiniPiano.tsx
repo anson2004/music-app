@@ -3,7 +3,7 @@ import { Audio } from "expo-av";
 
 import soundDo from '../assets/sounds/C.mp3';
 import soundRe from '../assets/sounds/D.mp3';
-import soundMi from '../assets/sounds/E.mp3'; // Ensure this file exists at the specified path
+import soundMi from '../assets/sounds/E.mp3'; 
 import soundFa from '../assets/sounds/F.mp3';
 import soundSo from '../assets/sounds/G.mp3';
 import soundLa from '../assets/sounds/A.mp3';
