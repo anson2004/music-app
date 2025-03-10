@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Piano from './component/Piano';
+import Piano from './component/MiniPiano';
 export default function App() {
 
   return (
