@@ -1,5 +1,9 @@
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 
+const WHITE_KEY_WIDTH = 35;
+const BLACK_KEY_WIDTH = 30;
+const BLACK_KEY_WIDTH_OFFSET = 25;
+
 const Piano: React.FC = () => {
   return (
     <View style={styles.piano}>
@@ -8,14 +12,14 @@ const Piano: React.FC = () => {
       </TouchableOpacity>
       <TouchableOpacity
         key={`black-do-half`}
-        style={[styles.key, styles.blackKey, { left: 25 }]}
+        style={[styles.key, styles.blackKey, { left: BLACK_KEY_WIDTH_OFFSET }]}
       />
       <TouchableOpacity key={`white-re`} style={[styles.key, styles.whiteKey]}>
         <Text style={styles.keyLabel}>re</Text>
       </TouchableOpacity>
       <TouchableOpacity
         key={`black-re-half`}
-        style={[styles.key, styles.blackKey, { left: 35 + 25 }]}
+        style={[styles.key, styles.blackKey, { left: WHITE_KEY_WIDTH + BLACK_KEY_WIDTH_OFFSET }]}
       />
       <TouchableOpacity key={`white-mi`} style={[styles.key, styles.whiteKey]}>
         <Text style={styles.keyLabel}>mi</Text>
@@ -25,21 +29,21 @@ const Piano: React.FC = () => {
       </TouchableOpacity>
       <TouchableOpacity
         key={`black-fa-half`}
-        style={[styles.key, styles.blackKey, { left: 3 * 35 + 25 }]}
+        style={[styles.key, styles.blackKey, { left: 3 * WHITE_KEY_WIDTH + BLACK_KEY_WIDTH_OFFSET }]}
       />
       <TouchableOpacity key={`white-so`} style={[styles.key, styles.whiteKey]}>
         <Text style={styles.keyLabel}>so</Text>
       </TouchableOpacity>
       <TouchableOpacity
         key={`black-so-half`}
-        style={[styles.key, styles.blackKey, { left: 4 * 35 + 25 }]}
+        style={[styles.key, styles.blackKey, { left: 4 * WHITE_KEY_WIDTH + BLACK_KEY_WIDTH_OFFSET }]}
       />
       <TouchableOpacity key={`white-la`} style={[styles.key, styles.whiteKey]}>
         <Text style={styles.keyLabel}>la</Text>
       </TouchableOpacity>
       <TouchableOpacity
         key={`black-la-half`}
-        style={[styles.key, styles.blackKey, { left: 5 * 35 + 25 }]}
+        style={[styles.key, styles.blackKey, { left: 5 * WHITE_KEY_WIDTH + BLACK_KEY_WIDTH_OFFSET }]}
       />
       <TouchableOpacity key={`white-si`} style={[styles.key, styles.whiteKey]}>
         <Text style={styles.keyLabel}>si</Text>
@@ -67,11 +71,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   whiteKey: {
-    width: 35,
+    width: WHITE_KEY_WIDTH,
     backgroundColor: "#fff",
   },
   blackKey: {
-    width: 30,
+    width: BLACK_KEY_WIDTH,
     backgroundColor: "#000",
     height: 100,
     position: "absolute",
