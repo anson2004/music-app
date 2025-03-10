@@ -1,5 +1,8 @@
+import { useEffect } from "react";
+
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { Audio } from "expo-av";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import soundDo from '../assets/sounds/C.mp3';
 import soundRe from '../assets/sounds/D.mp3';
@@ -25,6 +28,17 @@ const noteSounds = {
 };
 
 const MiniPiano = () => {
+
+  useEffect(() => {
+    // Change orientation to landscape when the component is mounted
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+
+    // Reset orientation to default when the component is unmounted
+    return () => {
+      ScreenOrientation.unlockAsync();
+    };
+  }, []);
+
   const playSound = async (note: keyof typeof noteSounds) => {
     const soundObject = new Audio.Sound();
     try {
