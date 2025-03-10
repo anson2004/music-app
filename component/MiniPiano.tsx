@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
   piano: {
     flexDirection: "row",
     marginTop: 20,
-    borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
     overflow: "hidden",
