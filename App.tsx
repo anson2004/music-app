@@ -1,27 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Piano from './component/MiniPiano';
-export default function App() {
+import MiniPiano from './component/MiniPiano';
+import MainContainer from './component/MainContainer';
 
+const Stack = createStackNavigator();
+
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type HomeScreenNavigationProp = StackNavigationProp<any, 'Home'>;
+
+const HomeScreen = ({ navigation }: { navigation: HomeScreenNavigationProp }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Professional Piano Keyboard</Text>
-      <Piano />
-      <StatusBar style="auto" />
-    </View>
+    <MainContainer title="Professional Piano Keyboard">
+      <View style={styles.block}>
+        <Text>Block 1</Text>
+      </View>
+      <TouchableOpacity style={styles.block} onPress={() => navigation.navigate('MiniPiano')}>
+        <Text>Go to MiniPiano</Text>
+      </TouchableOpacity>
+    </MainContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="MiniPiano" component={MiniPiano} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
+  block: {
+    width: '80%',
+    height: 100,
+    backgroundColor: '#ccc',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    margin: 10,
   },
 });
