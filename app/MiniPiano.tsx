@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { Audio } from "expo-av";
 import * as ScreenOrientation from 'expo-screen-orientation';
-import MainContainer from './MainContainer';
+import MainContainer from '../component/MainContainer';
 
 // Import sound files
 import soundDo from '../assets/sounds/C.mp3';
