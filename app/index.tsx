@@ -6,15 +6,17 @@ import MainContainer from "../component/MainContainer";
 const HomeScreen = () => {
   return (
     <MainContainer title="Have fun with music!">
-      <View style={styles.block}>
-        <Text>Block 1</Text>
-      </View>
-      <Link href="/MiniPiano" style={styles.block}>
-      <ImageBackground
-          source={require('../assets/icon.png')}
+      <Link href="/PaintPage" style={styles.block}>
+        <ImageBackground
+          source={require("../assets/favicon.png")}
           style={styles.imageBackground}
-        >
-        </ImageBackground>
+        ></ImageBackground>
+      </Link>
+      <Link href="/MiniPiano" style={styles.block}>
+        <ImageBackground
+          source={require("../assets/icon.png")}
+          style={styles.imageBackground}
+        ></ImageBackground>
       </Link>
     </MainContainer>
   );

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-const MainContainer = ({ children, title }: { children: React.ReactNode, title: string }) => {
+const MainContainer = ({ children, title }: { children?: React.ReactNode, title?: string }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      { title && (<Text style={styles.title}>{title}</Text>) }
       {children}
     </View>
   );
