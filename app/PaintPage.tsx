@@ -58,8 +58,8 @@ const PaintPage = () => {
       alignItems: 'center',
     },
     image: {
-      width: "80%",
-      height: "80%",
+      width: "95%",
+      height: "70%",
     },
     overlay: {
       position: 'absolute',
@@ -67,11 +67,11 @@ const PaintPage = () => {
       left: 0,
       right: 0,
       bottom: 0,
+      height: "95%",
     },
     colorPicker: {
       width: '80%',
-      height: 200,
-      marginTop: 20,
+      height: 50,
     },
   });
 export default PaintPage;
