@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "music app",
-    "slug": "music app",
+    "slug": "music-app",
     "scheme": "music-app-scheme",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +20,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.anson2004.musicapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +44,15 @@
         }
       ],
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1b590a69-4c4b-4cc4-a612-1e0fd4906b8b"
+      }
+    },
+    "owner": "anson2004"
   }
 }
