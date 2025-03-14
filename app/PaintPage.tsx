@@ -14,6 +14,7 @@ const PaintPage = () => {
         const { locationX, locationY } = evt.nativeEvent;
         //filter outlier points
         if (locationX < 10 && locationY < 10) return;
+        //TODO check if the point is inside the image
         setPaths(prevPaths => [...prevPaths, { x: locationX, y: locationY, color: selectedColor }]);
       },
     });
