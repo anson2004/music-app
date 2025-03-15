@@ -1,65 +1,98 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, Button, PanResponder } from "react-native";
+import { StyleSheet, View, Image, Button, PanResponder, TouchableOpacity } from "react-native";
 import MainContainer from "../component/MainContainer";
-import ColorPickerWheel from 'react-native-color-picker-wheel';
+import Svg, { Path } from 'react-native-svg';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+const COLORS = ['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFFFFF'];
+
+const BOUNDART_HEIGHT = 530;
+const BOUNDART_WIDTH = 400;
+// todo add boundary for lower part of the image
 
 const PaintPage = () => {
-    const [selectedColor, setSelectedColor] = useState<string>('#000000');
-    const [paths, setPaths] = useState<{ x: number, y: number, color: string }[]>([]);
+    const [selectedColor, setSelectedColor] = useState<string>(COLORS[0]);
+    const [currentPath, setCurrentPath] = useState<string>('');
+    const [paths, setPaths] = useState<{path: string, color: string}[]>([]);
   
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        // called every time the touch moves so we only need to mark dot when finger move
+      onPanResponderGrant: (evt) => {
         const { locationX, locationY } = evt.nativeEvent;
-        //filter outlier points
         if (locationX < 10 && locationY < 10) return;
-        // console.log(locationX, locationY);
-        //TODO check if the point is inside the image
-         // Ensure the points are within the bounds of the image
-        if (locationX >= 0 && locationX <= 400 && locationY >= 0 && locationY <= 450) {
-          setPaths(prevPaths => [...prevPaths, { x: locationX, y: locationY, color: selectedColor }]);
+        if (locationX >= 0 && locationX <= BOUNDART_WIDTH && locationY >= 0 && locationY <= BOUNDART_HEIGHT) {
+          setCurrentPath(`M ${locationX} ${locationY}`);
         }
       },
+      onPanResponderMove: (evt) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        if (locationX < 10 && locationY < 10) return;
+        if (locationX >= 0 && locationX <= BOUNDART_WIDTH && locationY >= 0 && locationY <= BOUNDART_HEIGHT) {
+          setCurrentPath(prevPath => `${prevPath} L ${locationX} ${locationY}`);
+        }
+      },
+      onPanResponderRelease: () => {
+        if (currentPath) {
+          setPaths(prevPaths => [...prevPaths, { path: currentPath, color: selectedColor }]);
+          setCurrentPath('');
+        }
+      }
     });
 
     const clearPaint = () => {
       setPaths([]);
+      setCurrentPath('');
     };
   
     return (
       <MainContainer>
-          <Image
-            source={require('../assets/paint/paint1.jpg')} // Replace with the correct path to your image
-            style={styles.image}
-            resizeMode="contain"
-            {...panResponder.panHandlers}
-          />
-          <View style={styles.overlay}>
-            {paths.map((path, index) => (
-              <View
-                key={index}
-                style={{
-                  position: 'absolute',
-                  left: path.x,
-                  top: path.y,
-                  width: 10,
-                  height: 10,
-                  backgroundColor: path.color,
-                  borderRadius: 5,
-                }}
-              />
-            ))}
+          <View style={styles.container}>
+            <Image
+              source={require('../assets/paint/paint1.jpg')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Svg style={[styles.overlay]} {...panResponder.panHandlers}>
+              {paths.map((path, index) => (
+                <Path
+                  key={index}
+                  d={path.path}
+                  stroke={path.color}
+                  strokeWidth={5}
+                  fill="none"
+                />
+              ))}
+              {currentPath ? (
+                <Path
+                  d={currentPath}
+                  stroke={selectedColor}
+                  strokeWidth={5}
+                  fill="none"
+                />
+              ) : null}
+            </Svg>
           </View>
           <View style={styles.controls}>
-          <ColorPickerWheel
-            initialColor={selectedColor}
-            onColorChangeComplete={(color: React.SetStateAction<string>) => setSelectedColor(color)}
-            style={styles.colorPicker}
-          />
-          <Button title="Clear" onPress={clearPaint} />
-        </View>
+            <View style={styles.colorPicker}>
+              {COLORS.map((color, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.colorButton,
+                    { backgroundColor: color },
+                    selectedColor === color && styles.selectedColor
+                  ]}
+                  onPress={() => setSelectedColor(color)}
+                />
+              ))}
+            </View>
+            <TouchableOpacity 
+              style={styles.clearButton}
+              onPress={clearPaint}
+            >
+              <MaterialCommunityIcons name="eraser" size={28} color="#666" />
+            </TouchableOpacity>
+          </View>
       </MainContainer>
     );
   };
@@ -67,12 +100,15 @@ const PaintPage = () => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
+      width: "100%",
       alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 50,
     },
     image: {
-      width: "95%",
-      height: "70%",
+      width: "100%",
+      height: "95%",
+      alignSelf: 'center',
     },
     overlay: {
       position: 'absolute',
@@ -80,22 +116,48 @@ const PaintPage = () => {
       left: 0,
       right: 0,
       bottom: 0,
-      height: "95%",
+      height: "100%",
+      width: "100%",
     },
     controls: {
-
-      flex: 1,
-     flexDirection: 'row',
+      position: 'absolute',
+      bottom: 10,
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      margin: 10,
+      width: '100%',
+      paddingHorizontal: 10,
     },
     colorPicker: {
-      width: '80%',
-      height: 50,
-      alignSelf: 'flex-start',
-
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      width: '50%',
       marginRight: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    colorButton: {
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      margin: 4,
+      borderWidth: 1,
+      borderColor: '#ccc',
+    },
+    selectedColor: {
+      borderWidth: 2,
+      borderColor: '#333',
+    },
+    clearButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: '#A0C878',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#ccc',
     },
   });
+  
 export default PaintPage;
