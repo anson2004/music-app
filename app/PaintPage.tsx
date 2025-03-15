@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, PanResponder } from "react-native";
+import { StyleSheet, View, Image, Button, PanResponder } from "react-native";
 import MainContainer from "../component/MainContainer";
 import ColorPickerWheel from 'react-native-color-picker-wheel';
 
@@ -11,13 +11,22 @@ const PaintPage = () => {
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
+        // called every time the touch moves so we only need to mark dot when finger move
         const { locationX, locationY } = evt.nativeEvent;
         //filter outlier points
         if (locationX < 10 && locationY < 10) return;
+        // console.log(locationX, locationY);
         //TODO check if the point is inside the image
-        setPaths(prevPaths => [...prevPaths, { x: locationX, y: locationY, color: selectedColor }]);
+         // Ensure the points are within the bounds of the image
+        if (locationX >= 0 && locationX <= 400 && locationY >= 0 && locationY <= 450) {
+          setPaths(prevPaths => [...prevPaths, { x: locationX, y: locationY, color: selectedColor }]);
+        }
       },
     });
+
+    const clearPaint = () => {
+      setPaths([]);
+    };
   
     return (
       <MainContainer>
@@ -43,11 +52,14 @@ const PaintPage = () => {
               />
             ))}
           </View>
+          <View style={styles.controls}>
           <ColorPickerWheel
             initialColor={selectedColor}
             onColorChangeComplete={(color: React.SetStateAction<string>) => setSelectedColor(color)}
             style={styles.colorPicker}
           />
+          <Button title="Clear" onPress={clearPaint} />
+        </View>
       </MainContainer>
     );
   };
@@ -70,9 +82,20 @@ const PaintPage = () => {
       bottom: 0,
       height: "95%",
     },
+    controls: {
+
+      flex: 1,
+     flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: 10,
+    },
     colorPicker: {
       width: '80%',
       height: 50,
+      alignSelf: 'flex-start',
+
+      marginRight: 10,
     },
   });
 export default PaintPage;
