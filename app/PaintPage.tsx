@@ -9,7 +9,7 @@ const COLORS = ['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF'
 const BOUNDART_HEIGHT = 530;
 const BOUNDART_WIDTH = 400;
 // todo add boundary for lower part of the image
-
+// TODO seperate Paint from main page
 const PaintPage = () => {
     const [selectedColor, setSelectedColor] = useState<string>(COLORS[0]);
     const [currentPath, setCurrentPath] = useState<string>('');
