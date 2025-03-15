@@ -14,6 +14,7 @@ const PaintPage = () => {
     const [selectedColor, setSelectedColor] = useState<string>(COLORS[0]);
     const [currentPath, setCurrentPath] = useState<string>('');
     const [paths, setPaths] = useState<{path: string, color: string}[]>([]);
+    const [isDrawing, setIsDrawing] = useState<boolean>(false);
   
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -22,19 +23,35 @@ const PaintPage = () => {
         if (locationX < 10 && locationY < 10) return;
         if (locationX >= 0 && locationX <= BOUNDART_WIDTH && locationY >= 0 && locationY <= BOUNDART_HEIGHT) {
           setCurrentPath(`M ${locationX} ${locationY}`);
+          setIsDrawing(true);
         }
       },
       onPanResponderMove: (evt) => {
         const { locationX, locationY } = evt.nativeEvent;
+        if (!isDrawing) return;
         if (locationX < 10 && locationY < 10) return;
         if (locationX >= 0 && locationX <= BOUNDART_WIDTH && locationY >= 0 && locationY <= BOUNDART_HEIGHT) {
-          setCurrentPath(prevPath => `${prevPath} L ${locationX} ${locationY}`);
+          try {
+            setCurrentPath(prevPath => {
+              // Only add L command if we have a valid previous path
+              if (prevPath && prevPath.startsWith('M')) {
+                return `${prevPath} L ${locationX} ${locationY}`;
+              }
+              // If no valid previous path, start a new one
+              return `M ${locationX} ${locationY}`;
+            });
+          } catch (error) {
+            console.log('Error updating path:', error);
+            // Reset the path if there's an error
+            setCurrentPath(`M ${locationX} ${locationY}`);
+          }
         }
       },
       onPanResponderRelease: () => {
-        if (currentPath) {
+        if (currentPath && isDrawing) {
           setPaths(prevPaths => [...prevPaths, { path: currentPath, color: selectedColor }]);
           setCurrentPath('');
+          setIsDrawing(false);
         }
       }
     });
@@ -42,6 +59,7 @@ const PaintPage = () => {
     const clearPaint = () => {
       setPaths([]);
       setCurrentPath('');
+      setIsDrawing(false);
     };
   
     return (
