@@ -5,7 +5,8 @@ import MainContainer from "../component/MainContainer";
 
 const HomeScreen = () => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
-  const isLandscape = screenWidth > screenHeight;
+  // assume it is phone
+  const isLandscape = screenWidth > screenHeight * 1.5;
 
   const blocks = [
     { href: "/PaintPage", title: "Paint", image: require("../assets/paint/paint1.jpg") },
