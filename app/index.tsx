@@ -44,13 +44,12 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 15,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     gap: 15,
+    paddingVertical: 20,
   },
   portraitContainer: {
     paddingHorizontal: 20,
@@ -59,7 +58,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   block: {
- 
     aspectRatio: 1,
     backgroundColor: "#ffffff",
     borderRadius: 15,
