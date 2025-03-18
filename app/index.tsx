@@ -11,7 +11,7 @@ const HomeScreen = () => {
   const blocks = [
     { href: "/PaintPage", title: "Paint", image: require("../assets/paint/paint1.jpg") },
     { href: "/MiniPiano", title: "Piano", image: require("../assets/icon.png") },
-    { href: "/ComingSoon", title: "Coming Soon", image: require("../assets/favicon.png") },
+    { href: "/MoodMusicPage", title: "Mood Music", image: require("../assets/favicon.png") },
     { href: "/ComingSoon2", title: "Coming Soon", image: require("../assets/favicon.png") },
   ];
 
