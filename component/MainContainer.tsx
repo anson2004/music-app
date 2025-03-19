@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 
 interface Props {
   children: React.ReactNode;
@@ -8,10 +8,10 @@ interface Props {
 
 const MainContainer = ({ children, title }: Props) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {title && <Text style={styles.title}>{title}</Text>}
       {children}
-    </View>
+    </SafeAreaView>
   );
 };
 
