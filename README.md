@@ -10,5 +10,5 @@ npx expo start
 ```
 npm install -g eas-cli
 npx eas login
-npx eas build -p andriod --profile preview
+npx eas build -p android --profile preview
 ```
