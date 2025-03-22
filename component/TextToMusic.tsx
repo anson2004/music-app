@@ -30,7 +30,7 @@ const MODES: {
     id: "happy",
     label: "Happy",
     description: "Upbeat and cheerful",
-    audio: require("../assets/music/sad.mp3"),
+    audio: require("../assets/music/happy.mp3"),
     icon: "emoticon-happy",
   },
   {
@@ -58,7 +58,7 @@ const MODES: {
     id: "meditation",
     label: "Meditation",
     description: "Zen and mindful",
-    audio: require("../assets/music/sad.mp3"),
+    audio: require("../assets/music/meditation.mp3"),
     icon: "meditation",
   },
 ];
