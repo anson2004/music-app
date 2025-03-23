@@ -81,7 +81,6 @@ const Paint = () => {
               onPress={() => setSelectedImage(image)}
             >
               <Image source={image.source} style={styles.thumbnail} />
-              <Text style={styles.imageLabel}>{image.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
