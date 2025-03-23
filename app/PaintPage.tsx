@@ -1,11 +1,11 @@
 import React from "react";
-import MainContainer from "../component/MainContainer";
-import Paint from "../component/Paint";
+import MainContainer from "./components/MainContainer";
+import Paint from "./components/Paint";
 
 const PaintPage = () => {
   return (
     <MainContainer>
-      <Paint imageSource={require('../assets/paint/paint1.jpg')} />
+      <Paint  />
     </MainContainer>
   );
 };

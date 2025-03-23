@@ -1,5 +1,5 @@
-import MiniPianoBoard from "../component/MiniPianoBoard";
-import MainContainer from "../component/MainContainer";
+import MiniPianoBoard from "./components/MiniPianoBoard";
+import MainContainer from "./components/MainContainer";
 
 const MiniPiano = () => {
   return (

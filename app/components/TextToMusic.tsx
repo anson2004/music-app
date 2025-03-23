@@ -30,35 +30,35 @@ const MODES: {
     id: "happy",
     label: "Happy",
     description: "Upbeat and cheerful",
-    audio: require("../assets/music/happy.mp3"),
+    audio: require("../../assets/music/happy.mp3"),
     icon: "emoticon-happy",
   },
   {
     id: "sad",
     label: "Sad",
     description: "Melancholic and emotional",
-    audio: require("../assets/music/sad.mp3"),
+    audio: require("../../assets/music/sad.mp3"),
     icon: "emoticon-sad",
   },
   {
     id: "peaceful",
     label: "Peaceful",
     description: "Calm and relaxing",
-    audio: require("../assets/music/sad.mp3"),
+    audio: require("../../assets/music/sad.mp3"),
     icon: "peace",
   },
   {
     id: "energetic",
     label: "Energetic",
     description: "Dynamic and powerful",
-    audio: require("../assets/music/sad.mp3"),
+    audio: require("../../assets/music/sad.mp3"),
     icon: "lightning-bolt",
   },
   {
     id: "meditation",
     label: "Meditation",
     description: "Zen and mindful",
-    audio: require("../assets/music/meditation.mp3"),
+    audio: require("../../assets/music/meditation.mp3"),
     icon: "meditation",
   },
 ];
@@ -80,7 +80,7 @@ const TextToMusic = ({}) => {
       }
       const { sound: createdSound } = await Audio.Sound.createAsync(
         MODES.find((m) => m.id === mode)?.audio ||
-          require("../assets/music/sad.mp3")
+          require("../../assets/music/happy.mp3")
       );
       setSound(createdSound);
       await createdSound?.playAsync();

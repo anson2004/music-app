@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import TextToMusic from '../component/TextToMusic';
+import TextToMusic from './components/TextToMusic';
 
 export default function MoodMusicPage() {
   return (
