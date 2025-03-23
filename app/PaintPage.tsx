@@ -5,7 +5,7 @@ import Paint from "./components/Paint";
 const PaintPage = () => {
   return (
     <MainContainer>
-      <Paint imageSource={require('../assets/paint/paint1.jpg')} />
+      <Paint  />
     </MainContainer>
   );
 };

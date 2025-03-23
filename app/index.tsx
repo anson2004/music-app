@@ -9,7 +9,7 @@ const HomeScreen = () => {
   const isLandscape = screenWidth > screenHeight * 1.5;
 
   const blocks = [
-    { href: "/PaintPage", title: "Paint", image: require("../assets/paint/paint1.jpg") },
+    { href: "/PaintPage", title: "Paint", image: require("../assets/paint/mario.jpg") },
     { href: "/MiniPiano", title: "Piano", image: require("../assets/piano.png") },
     { href: "/MoodMusicPage", title: "Mood Music", image: require("../assets/favicon.png") },
     { href: "/MoodMusicPage", title: "Coming Soon", image: require("../assets/favicon.png") },
