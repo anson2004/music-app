@@ -5,7 +5,7 @@
 npx expo start
 ```
 
-## How to build APK on local pc 
+## How to build APK using EAS
 
 ```
 npm install -g eas-cli
