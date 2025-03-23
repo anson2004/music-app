@@ -5,13 +5,13 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import * as FileSystem from 'expo-file-system';
 
 // Import sound files
-import soundDo from "../assets/sounds/C.mp3";
-import soundRe from "../assets/sounds/D.mp3";
-import soundMi from "../assets/sounds/E.mp3";
-import soundFa from "../assets/sounds/F.mp3";
-import soundSo from "../assets/sounds/G.mp3";
-import soundLa from "../assets/sounds/A.mp3";
-import soundSi from "../assets/sounds/B.mp3";
+import soundDo from "../../assets/sounds/C.mp3";
+import soundRe from "../../assets/sounds/D.mp3";
+import soundMi from "../../assets/sounds/E.mp3";
+import soundFa from "../../assets/sounds/F.mp3";
+import soundSo from "../../assets/sounds/G.mp3";
+import soundLa from "../../assets/sounds/A.mp3";
+import soundSi from "../../assets/sounds/B.mp3";
 
 const WHITE_KEY_WIDTH = 35;
 const BLACK_KEY_WIDTH = 30;

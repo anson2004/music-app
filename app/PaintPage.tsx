@@ -1,6 +1,6 @@
 import React from "react";
-import MainContainer from "../component/MainContainer";
-import Paint from "../component/Paint";
+import MainContainer from "./components/MainContainer";
+import Paint from "./components/Paint";
 
 const PaintPage = () => {
   return (

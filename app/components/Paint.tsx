@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, Image, TouchableOpacity, GestureResponderEvent, PanResponder, ImageSourcePropType } from "react-native";
 import Svg, { Path } from 'react-native-svg';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import usePaintStore from '../store/paintStore';
 
 const COLORS = ['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFFFFF'];
 
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const Paint = ({ imageSource }: Props) => {
-    const [selectedColor, setSelectedColor] = useState<string>(COLORS[0]);
+    const { color, setColor } = usePaintStore();
     const [currentPath, setCurrentPath] = useState<string>('');
     const [paths, setPaths] = useState<{path: string, color: string}[]>([]);
     const [isDrawing, setIsDrawing] = useState<boolean>(false);
@@ -51,7 +52,7 @@ const Paint = ({ imageSource }: Props) => {
       },
       onPanResponderRelease: () => {
         if (currentPath && isDrawing) {
-          setPaths(prevPaths => [...prevPaths, { path: currentPath, color: selectedColor }]);
+          setPaths(prevPaths => [...prevPaths, { path: currentPath, color }]);
           setCurrentPath('');
           setIsDrawing(false);
         }
@@ -84,7 +85,7 @@ const Paint = ({ imageSource }: Props) => {
           {currentPath ? (
             <Path
               d={currentPath}
-              stroke={selectedColor}
+              stroke={color}
               strokeWidth={5}
               fill="none"
             />
@@ -92,15 +93,15 @@ const Paint = ({ imageSource }: Props) => {
         </Svg>
         <View style={styles.controls}>
           <View style={styles.colorPicker}>
-            {COLORS.map((color, index) => (
+            {COLORS.map((colorOption, index) => (
               <TouchableOpacity
                 key={index}
                 style={[
                   styles.colorButton,
-                  { backgroundColor: color },
-                  selectedColor === color && styles.selectedColor
+                  { backgroundColor: colorOption },
+                  color === colorOption && styles.selectedColor
                 ]}
-                onPress={() => setSelectedColor(color)}
+                onPress={() => setColor(colorOption)}
               />
             ))}
           </View>

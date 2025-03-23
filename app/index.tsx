@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity, Text, ImageBackground, useWindowDimensions } from "react-native";
 import { Link } from "expo-router";
-import MainContainer from "../component/MainContainer";
+import MainContainer from "./components/MainContainer";
 
 const HomeScreen = () => {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -10,7 +10,7 @@ const HomeScreen = () => {
 
   const blocks = [
     { href: "/PaintPage", title: "Paint", image: require("../assets/paint/paint1.jpg") },
-    { href: "/MiniPiano", title: "Piano", image: require("../assets/icon.png") },
+    { href: "/MiniPiano", title: "Piano", image: require("../assets/piano.png") },
     { href: "/MoodMusicPage", title: "Mood Music", image: require("../assets/favicon.png") },
     { href: "/MoodMusicPage", title: "Coming Soon", image: require("../assets/favicon.png") },
   ];
