@@ -18,17 +18,12 @@ const IMAGES = [
 ];
 
 const usePaintStore = create<PaintState>()(
-  persist(
-    (set) => ({
-      color: "#000000",
-      selectedImage: IMAGES[0],
-      setColor: (color) => set({ color }),
-      setSelectedImage: (image) => set({ selectedImage: image }),
-    }),
-    {
-      name: "paint-storage",
-    }
-  )
+  (set) => ({
+    color: "#000000",
+    selectedImage: IMAGES[0],
+    setColor: (color) => set({ color }),
+    setSelectedImage: (image) => set({ selectedImage: image }),
+  })
 );
 
 export default usePaintStore;
