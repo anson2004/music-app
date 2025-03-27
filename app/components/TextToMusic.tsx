@@ -7,9 +7,11 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Audio } from "expo-av";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Svg, { Path, Circle } from "react-native-svg";
 
 type Mode = "happy" | "sad" | "peaceful" | "energetic" | "meditation";
 
@@ -57,37 +59,76 @@ const MODES: {
   },
 ];
 
-const VolumeControl = ({
-  label,
+const PieVolumeControl = ({
   value,
   onChange,
   icon,
+  size = 60,
 }: {
-  label: string;
   value: number;
   onChange: (value: number) => void;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  size?: number;
 }) => {
-  const steps = 10;
+  const radius = size / 2;
+  const strokeWidth = 8;
+  const center = radius;
+  const circumference = 2 * Math.PI * (radius - strokeWidth / 2);
+  const progress = value * circumference;
+  const startAngle = -Math.PI / 2; // Start from top
+  const endAngle = startAngle + (2 * Math.PI * value);
+
+  const getPoint = (angle: number) => {
+    const x = center + (radius - strokeWidth / 2) * Math.cos(angle);
+    const y = center + (radius - strokeWidth / 2) * Math.sin(angle);
+    return `${x},${y}`;
+  };
+
+  const getArcPath = () => {
+    const start = getPoint(startAngle);
+    const end = getPoint(endAngle);
+    const largeArcFlag = value > 0.5 ? 1 : 0;
+    return `M ${start} A ${radius - strokeWidth / 2} ${radius - strokeWidth / 2} 0 ${largeArcFlag} 1 ${end}`;
+  };
+
+  const handlePress = (event: any) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const dx = locationX - center;
+    const dy = locationY - center;
+    let angle = Math.atan2(dy, dx);
+    
+    // Adjust angle to start from top
+    angle = angle - startAngle;
+    if (angle < 0) angle += 2 * Math.PI;
+    
+    // Convert angle to value between 0 and 1
+    const newValue = Math.min(Math.max(angle / (2 * Math.PI), 0), 1);
+    onChange(newValue);
+  };
+
   return (
-    <View style={styles.mixerControl}>
-      <View style={styles.iconContainer}>
+    <TouchableOpacity onPress={handlePress} style={styles.pieContainer}>
+      <Svg width={size} height={size}>
+        {/* Background circle */}
+        <Circle
+          cx={center}
+          cy={center}
+          r={radius - strokeWidth / 2}
+          stroke="#ddd"
+          strokeWidth={strokeWidth}
+        />
+        {/* Progress arc */}
+        <Path
+          d={getArcPath()}
+          stroke="#007AFF"
+          strokeWidth={strokeWidth}
+          fill="none"
+        />
+      </Svg>
+      <View style={[styles.iconContainer, { position: 'absolute' }]}>
         <MaterialCommunityIcons name={icon} size={24} color="#007AFF" />
       </View>
-      <View style={styles.volumeBar}>
-        {Array.from({ length: steps }).map((_, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.volumeSegment,
-              index < value * steps && styles.volumeSegmentActive,
-            ]}
-            onPress={() => onChange((index + 1) / steps)}
-          />
-        ))}
-      </View>
-      <Text style={styles.volumeValue}>{Math.round(value * 100)}%</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -174,32 +215,25 @@ const TextToMusic = ({}) => {
               size={32}
               color={selectedMode === mode.id ? "#fff" : "#007AFF"}
             />
-         
           </TouchableOpacity>
         ))}
       </View>
 
       <View style={styles.mixer}>
         <Text style={styles.mixerTitle}>Mixer</Text>
-        {MODES.map((mode) => (
-          <VolumeControl
-            key={mode.id}
-            label={mode.label}
-            value={mixerVolumes[mode.id]}
-            onChange={(value) => updateVolume(mode.id, value)}
-            icon={mode.icon}
-          />
-        ))}
-        {/*
-         <VolumeControl
-          label="Master Volume"
-          value={mixerVolumes.master}
-          onChange={(value) => updateVolume("master", value)}
-          icon="volume-high"
-        />
-         */}
-       
-
+        <View style={styles.pieMixerContainer}>
+          {MODES.map((mode) => (
+            <View key={mode.id} style={styles.pieControlWrapper}>
+              <PieVolumeControl
+                value={mixerVolumes[mode.id]}
+                onChange={(value) => updateVolume(mode.id, value)}
+                icon={mode.icon}
+                size={80}
+              />
+              <Text style={styles.volumeValue}>{Math.round(mixerVolumes[mode.id] * 100)}%</Text>
+            </View>
+          ))}
+        </View>
       </View>
 
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -299,36 +333,31 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  mixerControl: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
+  pieMixerContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  pieContainer: {
+    width: 90,
+    height:90,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pieControlWrapper: {
+    alignItems: 'center',
   },
   iconContainer: {
     width: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  volumeBar: {
-    flex: 1,
-    flexDirection: "row",
-    height: 20,
-    backgroundColor: "#ddd",
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  volumeSegment: {
-    flex: 1,
-    backgroundColor: "#fff",
-    marginHorizontal: 1,
-  },
-  volumeSegmentActive: {
-    backgroundColor: "#007BFF",
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   volumeValue: {
-    width: 50,
-    textAlign: "right",
-    fontSize: 14,
+    marginTop: 5,
+    fontSize: 12,
+    color: '#666',
   },
 });
 
