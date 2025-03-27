@@ -61,15 +61,19 @@ const VolumeControl = ({
   label,
   value,
   onChange,
+  icon,
 }: {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
 }) => {
   const steps = 10;
   return (
     <View style={styles.mixerControl}>
-      <Text style={styles.mixerLabel}>{label}</Text>
+      <View style={styles.iconContainer}>
+        <MaterialCommunityIcons name={icon} size={24} color="#007AFF" />
+      </View>
       <View style={styles.volumeBar}>
         {Array.from({ length: steps }).map((_, index) => (
           <TouchableOpacity
@@ -98,6 +102,7 @@ const TextToMusic = ({}) => {
     peaceful: 1.0,
     energetic: 1.0,
     meditation: 1.0,
+    master: 1.0,
   });
 
   const handleGenerate = async (mode: Mode) => {
@@ -179,16 +184,22 @@ const TextToMusic = ({}) => {
         {MODES.map((mode) => (
           <VolumeControl
             key={mode.id}
-            label={`${mode.label} Volume`}
+            label={mode.label}
             value={mixerVolumes[mode.id]}
             onChange={(value) => updateVolume(mode.id, value)}
+            icon={mode.icon}
           />
         ))}
-        <VolumeControl
+        {/*
+         <VolumeControl
           label="Master Volume"
           value={mixerVolumes.master}
           onChange={(value) => updateVolume("master", value)}
+          icon="volume-high"
         />
+         */}
+       
+
       </View>
 
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -293,9 +304,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  mixerLabel: {
-    width: 120,
-    fontSize: 14,
+  iconContainer: {
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
   volumeBar: {
     flex: 1,
