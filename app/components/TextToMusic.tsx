@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Button,
@@ -11,13 +11,7 @@ import {
 import { Audio } from "expo-av";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-type Mode =
-  | "happy"
-  | "sad"
-  | "peaceful"
-  | "energetic"
-  | "romantic"
-  | "meditation";
+type Mode = "happy" | "sad" | "peaceful" | "energetic" | "meditation";
 
 const MODES: {
   id: Mode;
@@ -63,11 +57,48 @@ const MODES: {
   },
 ];
 
+const VolumeControl = ({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) => {
+  const steps = 10;
+  return (
+    <View style={styles.mixerControl}>
+      <Text style={styles.mixerLabel}>{label}</Text>
+      <View style={styles.volumeBar}>
+        {Array.from({ length: steps }).map((_, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.volumeSegment,
+              index < value * steps && styles.volumeSegmentActive,
+            ]}
+            onPress={() => onChange((index + 1) / steps)}
+          />
+        ))}
+      </View>
+      <Text style={styles.volumeValue}>{Math.round(value * 100)}%</Text>
+    </View>
+  );
+};
+
 const TextToMusic = ({}) => {
   const [selectedMode, setSelectedMode] = useState<Mode | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [mixerVolumes, setMixerVolumes] = useState({
+    happy: 1.0,
+    sad: 1.0,
+    peaceful: 1.0,
+    energetic: 1.0,
+    meditation: 1.0,
+  });
 
   const handleGenerate = async (mode: Mode) => {
     setSelectedMode(mode);
@@ -81,6 +112,9 @@ const TextToMusic = ({}) => {
       const { sound: createdSound } = await Audio.Sound.createAsync(
         MODES.find((m) => m.id === mode)?.audio ||
           require("../../assets/music/happy.mp3")
+      );
+      await createdSound.setVolumeAsync(
+        mixerVolumes[mode] * mixerVolumes.master
       );
       setSound(createdSound);
       await createdSound?.playAsync();
@@ -98,6 +132,21 @@ const TextToMusic = ({}) => {
       setSound(null);
     }
   };
+
+  const updateVolume = (type: keyof typeof mixerVolumes, value: number) => {
+    setMixerVolumes((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -120,24 +169,26 @@ const TextToMusic = ({}) => {
               size={32}
               color={selectedMode === mode.id ? "#fff" : "#007AFF"}
             />
-            <Text
-              style={[
-                styles.modeLabel,
-                selectedMode === mode.id && styles.selectedModeText,
-              ]}
-            >
-              {mode.label}
-            </Text>
-            <Text
-              style={[
-                styles.modeDescription,
-                selectedMode === mode.id && styles.selectedModeText,
-              ]}
-            >
-              {mode.description}
-            </Text>
+         
           </TouchableOpacity>
         ))}
+      </View>
+
+      <View style={styles.mixer}>
+        <Text style={styles.mixerTitle}>Mixer</Text>
+        {MODES.map((mode) => (
+          <VolumeControl
+            key={mode.id}
+            label={`${mode.label} Volume`}
+            value={mixerVolumes[mode.id]}
+            onChange={(value) => updateVolume(mode.id, value)}
+          />
+        ))}
+        <VolumeControl
+          label="Master Volume"
+          value={mixerVolumes.master}
+          onChange={(value) => updateVolume("master", value)}
+        />
       </View>
 
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -180,13 +231,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   modeButton: {
-    width: "45%",
+    width: "20%",
     padding: 16,
     borderRadius: 12,
     backgroundColor: "#f0f0f0",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 120,
+    minHeight: 50,
   },
   selectedMode: {
     backgroundColor: "#007AFF",
@@ -222,6 +273,50 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 16,
     textAlign: "center",
+  },
+  mixer: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  mixerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  mixerControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  mixerLabel: {
+    width: 120,
+    fontSize: 14,
+  },
+  volumeBar: {
+    flex: 1,
+    flexDirection: "row",
+    height: 20,
+    backgroundColor: "#ddd",
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  volumeSegment: {
+    flex: 1,
+    backgroundColor: "#fff",
+    marginHorizontal: 1,
+  },
+  volumeSegmentActive: {
+    backgroundColor: "#007BFF",
+  },
+  volumeValue: {
+    width: 50,
+    textAlign: "right",
+    fontSize: 14,
   },
 });
 
