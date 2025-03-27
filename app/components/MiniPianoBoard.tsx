@@ -30,8 +30,11 @@ const noteSounds = {
 
 const MiniPianoBoard = () => {
   const [soundObjects, setSoundObjects] = useState<Audio.Sound[]>([]);
+  const [recordedSoundUri, setRecordedSoundUri] = useState<string | null>(null);
   const recordingRef = useRef<Audio.Recording | null>(null);
+  const recordedSoundRef = useRef<Audio.Sound | null>(null);
 
+  /*
   useEffect(() => {
     // Change orientation to landscape when the component is mounted
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -43,6 +46,7 @@ const MiniPianoBoard = () => {
       soundObjects.forEach(soundObject => soundObject.unloadAsync());
     };
   }, [soundObjects]);
+  */
 
   const playSound = async (note: keyof typeof noteSounds) => {
     const soundObject = new Audio.Sound();
@@ -91,11 +95,38 @@ const MiniPianoBoard = () => {
           to: newUri,
         });
         console.log('Recording moved to', newUri);
+        setRecordedSoundUri(newUri);
       }
     } catch (error) {
       console.error('Failed to stop recording', error);
     }
   };
+
+  const playRecordedSound = async () => {
+    try {
+      if (recordedSoundRef.current) {
+        await recordedSoundRef.current.unloadAsync();
+      }
+
+      if (recordedSoundUri) {
+        const sound = new Audio.Sound();
+        await sound.loadAsync({ uri: recordedSoundUri });
+        await sound.playAsync();
+        recordedSoundRef.current = sound;
+      }
+    } catch (error) {
+      console.error('Failed to play recorded sound', error);
+    }
+  };
+
+  // Cleanup function
+  useEffect(() => {
+    return () => {
+      if (recordedSoundRef.current) {
+        recordedSoundRef.current.unloadAsync();
+      }
+    };
+  }, []);
 
   return (
     <View>
@@ -193,7 +224,17 @@ const MiniPianoBoard = () => {
         <TouchableOpacity onPress={stopRecording} style={styles.controlButton}>
           <Text style={styles.controlButtonText}>Stop Recording</Text>
         </TouchableOpacity>
+      
       </View>
+      <View style={styles.controls}>
+      <TouchableOpacity 
+          onPress={playRecordedSound} 
+          style={[styles.controlButton, !recordedSoundUri && styles.disabledButton]}
+          disabled={!recordedSoundUri}
+        >
+          <Text style={styles.controlButtonText}>Play Sound</Text>
+        </TouchableOpacity>
+        </View>
     </View>
   );
 };
@@ -207,6 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: "hidden",
     position: "relative",
+    justifyContent: "space-around",
   },
   key: {
     height: 150,
@@ -244,6 +286,9 @@ const styles = StyleSheet.create({
   controlButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  disabledButton: {
+    backgroundColor: '#cccccc',
   },
 });
 
