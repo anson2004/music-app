@@ -13,9 +13,9 @@ import soundSo from "../../assets/sounds/G.mp3";
 import soundLa from "../../assets/sounds/A.mp3";
 import soundSi from "../../assets/sounds/B.mp3";
 
-const WHITE_KEY_WIDTH = 35;
-const BLACK_KEY_WIDTH = 30;
-const BLACK_KEY_WIDTH_OFFSET = 25;
+const WHITE_KEY_WIDTH = 42;
+const BLACK_KEY_WIDTH = 38;
+const BLACK_KEY_WIDTH_OFFSET = 28;
 
 // Mapping object for note sounds
 const noteSounds = {
