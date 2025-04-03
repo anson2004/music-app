@@ -7,6 +7,7 @@ import {
   GestureResponderEvent,
   PanResponder,
   ImageSourcePropType,
+  Dimensions,
   Text,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
@@ -33,8 +34,9 @@ const IMAGES = [
   },
 ];
 
-const BOUNDART_HEIGHT = 530;
-const BOUNDART_WIDTH = 400;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const BOUNDART_HEIGHT = SCREEN_HEIGHT * 0.7; // Set height to 70% of screen height
+const BOUNDART_WIDTH = SCREEN_WIDTH * 0.9; 
 
 interface Props {
   imageSource: ImageSourcePropType;
